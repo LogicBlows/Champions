@@ -1,0 +1,6 @@
+@ChampionPortal.Api_HostAddress = http://localhost:5228
+
+GET {{ChampionPortal.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,32 @@
+# Build / publish output
+artifacts/
+
+# .NET
+**/bin/
+**/obj/
+**/.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Node / Vite
+**/node_modules/
+**/dist/
+*.local
+
+# Logs & OS
+*.log
+.DS_Store
+Thumbs.db
+
+# Secrets
+.env
+.env.*
+!.env.example
+**/appsettings.*.local.json
+
+# IDE
+.idea/
+.vscode/*
+!.vscode/extensions.json
