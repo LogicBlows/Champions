@@ -12,7 +12,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   if (isAuthenticated) {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/home" replace />;
   }
 
   async function handleSubmit(event: FormEvent) {
@@ -22,7 +22,7 @@ export default function LoginPage() {
 
     try {
       await login(employeeCode.trim());
-      navigate('/dashboard');
+      navigate('/home');
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Login failed.');
     } finally {

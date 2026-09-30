@@ -1,9 +1,12 @@
+import { Link } from 'react-router-dom';
+
 type BrandMarkProps = {
   size?: 'default' | 'large';
+  homeLink?: boolean;
 };
 
-export default function BrandMark({ size = 'default' }: BrandMarkProps) {
-  return (
+export default function BrandMark({ size = 'default', homeLink = false }: BrandMarkProps) {
+  const content = (
     <div className={`brand-mark${size === 'large' ? ' brand-mark--large' : ''}`}>
       <span className="brand-mark-icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -16,4 +19,14 @@ export default function BrandMark({ size = 'default' }: BrandMarkProps) {
       <span className="brand-mark-text">Champion Portal</span>
     </div>
   );
+
+  if (homeLink) {
+    return (
+      <Link to="/home" className="brand-mark-link" aria-label="Champion Portal home">
+        {content}
+      </Link>
+    );
+  }
+
+  return content;
 }

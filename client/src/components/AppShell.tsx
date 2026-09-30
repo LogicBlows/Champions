@@ -1,4 +1,5 @@
-import { NavLink, Navigate, Outlet } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { NavLink, Navigate, Outlet, useLocation } from 'react-router-dom';
 import BrandMark from './BrandMark';
 import { useAuth } from '../features/auth/AuthContext';
 
@@ -13,7 +14,7 @@ export function AuthGuard() {
 export function ReviewerGuard() {
   const { isReviewer } = useAuth();
   if (!isReviewer) {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/home" replace />;
   }
   return <Outlet />;
 }
@@ -23,39 +24,73 @@ function sidebarLinkClass({ isActive }: { isActive: boolean }) {
 }
 
 export function AppLayout() {
-  const { name, isReviewer, logout } = useAuth();
+  const { name, isReviewer } = useAuth();
+  const location = useLocation();
+  const isActivityRoute = location.pathname.startsWith('/activities');
+  const [activityOpen, setActivityOpen] = useState(isActivityRoute);
+
+  useEffect(() => {
+    if (isActivityRoute) {
+      setActivityOpen(true);
+    }
+  }, [isActivityRoute]);
 
   return (
     <div className="app-shell">
       {/* Left column: brand + navigation */}
       <aside className="sidebar">
-        <p className="sidebar-tagline">GenAI Activity Recognition</p>
+        <div className="sidebar-brand">
+          <BrandMark homeLink />
+        </div>
 
         <nav className="sidebar-nav">
-          <NavLink to="/dashboard" className={sidebarLinkClass} end>
+          <NavLink to="/home" className={sidebarLinkClass} end>
+            Home
+          </NavLink>
+          <NavLink to="/dashboard" className={sidebarLinkClass}>
             Dashboard
           </NavLink>
-          <NavLink to="/activities/new" className={sidebarLinkClass}>
-            My Activities
-          </NavLink>
+          <div className="sidebar-group">
+            <button
+              type="button"
+              className={`sidebar-link sidebar-toggle${isActivityRoute ? ' active' : ''}`}
+              onClick={() => setActivityOpen((open) => !open)}
+              aria-expanded={activityOpen}
+              aria-controls="sidebar-activity-subnav"
+            >
+              <span>Activity</span>
+              <span className="sidebar-chevron" aria-hidden>
+                {activityOpen ? '▾' : '▸'}
+              </span>
+            </button>
+            {activityOpen && (
+              <div id="sidebar-activity-subnav" className="sidebar-subnav">
+                <NavLink to="/activities/my" className={sidebarLinkClass}>
+                  My Activity
+                </NavLink>
+                <NavLink to="/activities/history" className={sidebarLinkClass}>
+                  History
+                </NavLink>
+              </div>
+            )}
+          </div>
           {isReviewer && (
             <NavLink to="/review" className={sidebarLinkClass}>
               Review Queue
             </NavLink>
           )}
+          <NavLink to="/settings" className={sidebarLinkClass}>
+            Settings
+          </NavLink>
         </nav>
       </aside>
 
       {/* Right column: top bar + page content */}
       <div className="app-content">
         <header className="top-bar">
-          <BrandMark />
           <div className="top-bar-actions">
-            <span className="muted">Welcome {name}</span>
+            <span className="top-bar-name">{name}</span>
             {isReviewer && <span className="badge-reviewer">Reviewer</span>}
-            <button type="button" className="btn btn-ghost" onClick={logout}>
-              Sign out
-            </button>
           </div>
         </header>
 

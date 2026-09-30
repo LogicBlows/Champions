@@ -71,7 +71,7 @@ if (isLoading && !data) return <p className="muted">Loading dashboard…</p>;
           <h2>Dashboard</h2>
           <p className="muted">Team activity and leaderboard</p>
         </div>
-        <Link to="/activities/new" className="btn btn-primary">
+        <Link to="/activities/my" className="btn btn-primary">
           Log an Activity
         </Link>
       </div>
