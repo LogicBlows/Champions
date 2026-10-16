@@ -12,8 +12,16 @@ export function AuthGuard() {
 }
 
 export function ReviewerGuard() {
-  const { isReviewer } = useAuth();
-  if (!isReviewer) {
+  const { isAdmin, isReviewer } = useAuth();
+  if (!isAdmin && !isReviewer) {
+    return <Navigate to="/home" replace />;
+  }
+  return <Outlet />;
+}
+
+export function AdminGuard() {
+  const { isAdmin } = useAuth();
+  if (!isAdmin) {
     return <Navigate to="/home" replace />;
   }
   return <Outlet />;
@@ -24,7 +32,8 @@ function sidebarLinkClass({ isActive }: { isActive: boolean }) {
 }
 
 export function AppLayout() {
-  const { name, isReviewer } = useAuth();
+  const { name, isReviewer, isAdmin } = useAuth();
+  const canReview = isAdmin || isReviewer;
   const location = useLocation();
   const isActivityRoute = location.pathname.startsWith('/activities');
   const [activityOpen, setActivityOpen] = useState(isActivityRoute);
@@ -74,9 +83,14 @@ export function AppLayout() {
               </div>
             )}
           </div>
-          {isReviewer && (
+          {canReview && (
             <NavLink to="/review" className={sidebarLinkClass}>
               Review Queue
+            </NavLink>
+          )}
+          {isAdmin && (
+            <NavLink to="/admin" className={sidebarLinkClass}>
+              Admin center
             </NavLink>
           )}
           <NavLink to="/settings" className={sidebarLinkClass}>
@@ -91,6 +105,7 @@ export function AppLayout() {
           <div className="top-bar-actions">
             <span className="top-bar-name">{name}</span>
             {isReviewer && <span className="badge-reviewer">Reviewer</span>}
+            {isAdmin && <span className="badge-reviewer">Admin</span>}
           </div>
         </header>
 

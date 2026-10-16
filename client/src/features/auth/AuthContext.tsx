@@ -14,6 +14,7 @@ interface AuthState {
   employeeId: string | null;
   name: string | null;
   isReviewer: boolean;
+  isAdmin: boolean;
   isAuthenticated: boolean;
   login: (employeeCode: string) => Promise<void>;
   logout: () => void;
@@ -26,6 +27,7 @@ interface StoredAuth {
   employeeId: string;
   name: string;
   isReviewer: boolean;
+  isAdmin: boolean;
 }
 
 function readStoredAuth(): StoredAuth | null {
@@ -55,6 +57,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [employeeId, setEmployeeId] = useState<string | null>(stored?.employeeId ?? null);
   const [name, setName] = useState<string | null>(stored?.name ?? null);
   const [isReviewer, setIsReviewer] = useState(stored?.isReviewer ?? false);
+  const [isAdmin, setIsAdmin] = useState(stored?.isAdmin ?? false);
 
   const login = useCallback(async (employeeCode: string) => {
     const result = await apiRequest<LoginResponse>('/auth/login', {
@@ -67,12 +70,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       employeeId: result.employeeId,
       name: result.name,
       isReviewer: result.isReviewer,
+      isAdmin: result.isAdmin,
     });
 
     setToken(result.token);
     setEmployeeId(result.employeeId);
     setName(result.name);
     setIsReviewer(result.isReviewer);
+    setIsAdmin(result.isAdmin);
   }, []);
 
   const logout = useCallback(() => {
@@ -81,6 +86,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setEmployeeId(null);
     setName(null);
     setIsReviewer(false);
+    setIsAdmin(false);
   }, []);
 
   const value = useMemo(
@@ -89,11 +95,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       employeeId,
       name,
       isReviewer,
+      isAdmin,
       isAuthenticated: token !== null,
       login,
       logout,
     }),
-    [token, employeeId, name, isReviewer, login, logout],
+    [token, employeeId, name, isReviewer, isAdmin, login, logout],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

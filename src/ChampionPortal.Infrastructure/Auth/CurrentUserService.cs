@@ -32,4 +32,13 @@ public class CurrentUserService : ICurrentUserService
             return bool.TryParse(value, out var isReviewer) && isReviewer;
         }
     }
+
+    public bool IsAdmin
+    {
+        get
+        {
+            var value = _httpContextAccessor.HttpContext?.User.FindFirstValue("is_admin");
+            return bool.TryParse(value, out var isAdmin) && isAdmin;
+        }
+    }
 }

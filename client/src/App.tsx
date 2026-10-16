@@ -1,5 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ApiError } from './api/client';
 import { AuthProvider } from './features/auth/AuthContext';
 import LoginPage from './features/auth/LoginPage';
 import HomePage from './features/home/HomePage';
@@ -8,11 +9,25 @@ import MyActivitiesPage from './features/activities/MyActivitiesPage';
 import MyActivityHistoryPage from './features/activities/MyActivityHistoryPage';
 import EmployeeActivityHistoryPage from './features/activities/EmployeeActivityHistoryPage';
 import ReviewQueuePage from './features/review/ReviewQueuePage';
-import { AppLayout, AuthGuard, ReviewerGuard } from './components/AppShell';
+import { AdminGuard, AppLayout, AuthGuard, ReviewerGuard } from './components/AppShell';
 import SettingsPage from './features/settings/SettingsPage';
+import AdminCenterPage from './features/admin/AdminCenterPage';
+import AdminEmployeesPage from './features/admin/AdminEmployeesPage';
+import AdminCompetenciesPage from './features/admin/AdminCompetenciesPage';
 import { ThemeProvider } from './features/settings/ThemeContext';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: (failureCount, error) => {
+        if (error instanceof ApiError && error.status < 500) {
+          return false;
+        }
+        return failureCount < 2;
+      },
+    },
+  },
+});
 
 export default function App() {
   return (
@@ -40,6 +55,11 @@ export default function App() {
                 <Route path="/settings" element={<SettingsPage />} />
                 <Route element={<ReviewerGuard />}>
                   <Route path="/review" element={<ReviewQueuePage />} />
+                </Route>
+                <Route element={<AdminGuard />}>
+                  <Route path="/admin" element={<AdminCenterPage />} />
+                  <Route path="/admin/employees" element={<AdminEmployeesPage />} />
+                  <Route path="/admin/competencies" element={<AdminCompetenciesPage />} />
                 </Route>
               </Route>
             </Route>

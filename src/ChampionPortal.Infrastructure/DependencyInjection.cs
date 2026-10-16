@@ -13,6 +13,7 @@ public static class DependencyInjection
         services.AddHttpContextAccessor();
 
         services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+        services.AddScoped<ICompetencyRepository, CompetencyRepository>();
         services.AddScoped<IActivityTypeRepository, ActivityTypeRepository>();
         services.AddScoped<IActivityLogRepository, ActivityLogRepository>();
         services.AddScoped<IEndorsementRepository, EndorsementRepository>();

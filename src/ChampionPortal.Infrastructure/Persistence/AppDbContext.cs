@@ -11,6 +11,8 @@ public class AppDbContext : DbContext
     }
 
     public DbSet<Employee> Employees => Set<Employee>();
+
+    public DbSet<Competency> Competencies => Set<Competency>();
     public DbSet<ActivityType> ActivityTypes => Set<ActivityType>();
     public DbSet<ActivityLog> ActivityLogs => Set<ActivityLog>();
     public DbSet<Endorsement> Endorsements => Set<Endorsement>();

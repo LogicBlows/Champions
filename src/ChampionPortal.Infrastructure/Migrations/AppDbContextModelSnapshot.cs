@@ -180,15 +180,101 @@ namespace ChampionPortal.Infrastructure.Migrations
                         });
                 });
 
+            modelBuilder.Entity("ChampionPortal.Domain.Entities.Competency", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<Guid?>("HeadEmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.HasIndex("HeadEmployeeId");
+
+                    b.ToTable("Competencies");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = new Guid("33333333-cccc-cccc-cccc-000000000001"),
+                            Code = "dotnet",
+                            Description = "Dotnet Developers",
+                            Name = "DotNet",
+                            SortOrder = 1,
+                            isActive = true
+                        },
+                        new
+                        {
+                            ID = new Guid("33333333-cccc-cccc-cccc-000000000002"),
+                            Code = "java",
+                            Description = "Java Developers",
+                            Name = "Java",
+                            SortOrder = 2,
+                            isActive = true
+                        },
+                        new
+                        {
+                            ID = new Guid("33333333-cccc-cccc-cccc-000000000003"),
+                            Code = "data",
+                            Description = "Data Sceientist and Engineers",
+                            Name = "Data",
+                            SortOrder = 3,
+                            isActive = true
+                        },
+                        new
+                        {
+                            ID = new Guid("33333333-cccc-cccc-cccc-000000000004"),
+                            Code = "php",
+                            Description = "PHP Developers",
+                            Name = "PHP",
+                            SortOrder = 4,
+                            isActive = true
+                        },
+                        new
+                        {
+                            ID = new Guid("33333333-cccc-cccc-cccc-000000000005"),
+                            Code = "database",
+                            Description = "Database admins and developers",
+                            Name = "Database",
+                            SortOrder = 5,
+                            isActive = true
+                        });
+                });
+
             modelBuilder.Entity("ChampionPortal.Domain.Entities.Employee", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Competency")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("CompetencyId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -204,6 +290,9 @@ namespace ChampionPortal.Infrastructure.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsReviewer")
                         .HasColumnType("bit");
 
@@ -212,6 +301,8 @@ namespace ChampionPortal.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CompetencyId");
 
                     b.HasIndex("EmployeeCode")
                         .IsUnique();
@@ -222,46 +313,482 @@ namespace ChampionPortal.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000001"),
-                            Competency = ".NET",
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000001"),
                             CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "alice.reviewer@example.com",
                             EmployeeCode = "EMP001",
                             IsActive = true,
-                            IsReviewer = true,
-                            Name = "Alice Reviewer"
+                            IsAdmin = true,
+                            IsReviewer = false,
+                            Name = "Alice Admin"
                         },
                         new
                         {
                             Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000002"),
-                            Competency = ".NET",
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000001"),
                             CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "bob.developer@example.com",
                             EmployeeCode = "EMP002",
                             IsActive = true,
-                            IsReviewer = false,
+                            IsAdmin = false,
+                            IsReviewer = true,
                             Name = "Bob Developer"
                         },
                         new
                         {
                             Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000003"),
-                            Competency = "Data",
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000001"),
                             CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Email = "carol.analyst@example.com",
+                            Email = "priya.sharma@example.com",
                             EmployeeCode = "EMP003",
                             IsActive = true,
+                            IsAdmin = false,
+                            IsReviewer = false,
+                            Name = "Priya Sharma"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000004"),
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000001"),
+                            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "arjun.patel@example.com",
+                            EmployeeCode = "EMP004",
+                            IsActive = true,
+                            IsAdmin = false,
+                            IsReviewer = false,
+                            Name = "Arjun Patel"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000005"),
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000001"),
+                            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "ananya.reddy@example.com",
+                            EmployeeCode = "EMP005",
+                            IsActive = true,
+                            IsAdmin = false,
+                            IsReviewer = false,
+                            Name = "Ananya Reddy"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000006"),
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000001"),
+                            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "vikram.singh@example.com",
+                            EmployeeCode = "EMP006",
+                            IsActive = true,
+                            IsAdmin = false,
+                            IsReviewer = false,
+                            Name = "Vikram Singh"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000007"),
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000001"),
+                            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "emily.chen@example.com",
+                            EmployeeCode = "EMP007",
+                            IsActive = true,
+                            IsAdmin = false,
+                            IsReviewer = false,
+                            Name = "Emily Chen"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000008"),
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000001"),
+                            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "rohan.gupta@example.com",
+                            EmployeeCode = "EMP008",
+                            IsActive = true,
+                            IsAdmin = false,
+                            IsReviewer = false,
+                            Name = "Rohan Gupta"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000009"),
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000002"),
+                            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "kavya.iyer@example.com",
+                            EmployeeCode = "EMP009",
+                            IsActive = true,
+                            IsAdmin = false,
+                            IsReviewer = false,
+                            Name = "Kavya Iyer"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000010"),
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000002"),
+                            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "aditya.joshi@example.com",
+                            EmployeeCode = "EMP010",
+                            IsActive = true,
+                            IsAdmin = false,
+                            IsReviewer = false,
+                            Name = "Aditya Joshi"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000011"),
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000002"),
+                            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "meera.nair@example.com",
+                            EmployeeCode = "EMP011",
+                            IsActive = true,
+                            IsAdmin = false,
+                            IsReviewer = false,
+                            Name = "Meera Nair"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000012"),
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000002"),
+                            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "james.wilson@example.com",
+                            EmployeeCode = "EMP012",
+                            IsActive = true,
+                            IsAdmin = false,
+                            IsReviewer = false,
+                            Name = "James Wilson"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000013"),
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000002"),
+                            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "sanjay.krishnan@example.com",
+                            EmployeeCode = "EMP013",
+                            IsActive = true,
+                            IsAdmin = false,
+                            IsReviewer = false,
+                            Name = "Sanjay Krishnan"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000014"),
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000002"),
+                            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "divya.menon@example.com",
+                            EmployeeCode = "EMP014",
+                            IsActive = true,
+                            IsAdmin = false,
+                            IsReviewer = false,
+                            Name = "Divya Menon"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000015"),
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000002"),
+                            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "rahul.verma@example.com",
+                            EmployeeCode = "EMP015",
+                            IsActive = true,
+                            IsAdmin = false,
+                            IsReviewer = false,
+                            Name = "Rahul Verma"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000016"),
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000002"),
+                            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "lisa.park@example.com",
+                            EmployeeCode = "EMP016",
+                            IsActive = true,
+                            IsAdmin = false,
+                            IsReviewer = false,
+                            Name = "Lisa Park"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000017"),
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000003"),
+                            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "carol.analyst@example.com",
+                            EmployeeCode = "EMP017",
+                            IsActive = true,
+                            IsAdmin = false,
                             IsReviewer = false,
                             Name = "Carol Analyst"
                         },
                         new
                         {
-                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000004"),
-                            Competency = "Cloud",
+                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000018"),
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000003"),
+                            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "isha.kapoor@example.com",
+                            EmployeeCode = "EMP018",
+                            IsActive = true,
+                            IsAdmin = false,
+                            IsReviewer = false,
+                            Name = "Isha Kapoor"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000019"),
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000003"),
+                            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "nikhil.desai@example.com",
+                            EmployeeCode = "EMP019",
+                            IsActive = true,
+                            IsAdmin = false,
+                            IsReviewer = false,
+                            Name = "Nikhil Desai"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000020"),
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000003"),
+                            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "pooja.bhat@example.com",
+                            EmployeeCode = "EMP020",
+                            IsActive = true,
+                            IsAdmin = false,
+                            IsReviewer = false,
+                            Name = "Pooja Bhat"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000021"),
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000003"),
+                            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "michael.torres@example.com",
+                            EmployeeCode = "EMP021",
+                            IsActive = true,
+                            IsAdmin = false,
+                            IsReviewer = false,
+                            Name = "Michael Torres"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000022"),
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000003"),
+                            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "shruti.pillai@example.com",
+                            EmployeeCode = "EMP022",
+                            IsActive = true,
+                            IsAdmin = false,
+                            IsReviewer = false,
+                            Name = "Shruti Pillai"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000023"),
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000003"),
+                            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "karthik.rao@example.com",
+                            EmployeeCode = "EMP023",
+                            IsActive = true,
+                            IsAdmin = false,
+                            IsReviewer = false,
+                            Name = "Karthik Rao"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000024"),
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000003"),
+                            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "neha.choudhary@example.com",
+                            EmployeeCode = "EMP024",
+                            IsActive = true,
+                            IsAdmin = false,
+                            IsReviewer = false,
+                            Name = "Neha Choudhary"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000025"),
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000004"),
+                            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "amit.shah@example.com",
+                            EmployeeCode = "EMP025",
+                            IsActive = true,
+                            IsAdmin = false,
+                            IsReviewer = false,
+                            Name = "Amit Shah"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000026"),
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000004"),
+                            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "deepa.nambiar@example.com",
+                            EmployeeCode = "EMP026",
+                            IsActive = true,
+                            IsAdmin = false,
+                            IsReviewer = false,
+                            Name = "Deepa Nambiar"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000027"),
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000004"),
+                            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "chris.evans@example.com",
+                            EmployeeCode = "EMP027",
+                            IsActive = true,
+                            IsAdmin = false,
+                            IsReviewer = false,
+                            Name = "Chris Evans"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000028"),
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000004"),
+                            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "lakshmi.venkatesh@example.com",
+                            EmployeeCode = "EMP028",
+                            IsActive = true,
+                            IsAdmin = false,
+                            IsReviewer = false,
+                            Name = "Lakshmi Venkatesh"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000029"),
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000004"),
+                            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "harish.malhotra@example.com",
+                            EmployeeCode = "EMP029",
+                            IsActive = true,
+                            IsAdmin = false,
+                            IsReviewer = false,
+                            Name = "Harish Malhotra"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000030"),
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000004"),
+                            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "sneha.dutta@example.com",
+                            EmployeeCode = "EMP030",
+                            IsActive = true,
+                            IsAdmin = false,
+                            IsReviewer = false,
+                            Name = "Sneha Dutta"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000031"),
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000004"),
+                            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "daniel.brooks@example.com",
+                            EmployeeCode = "EMP031",
+                            IsActive = true,
+                            IsAdmin = false,
+                            IsReviewer = false,
+                            Name = "Daniel Brooks"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000032"),
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000004"),
+                            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "varun.agarwal@example.com",
+                            EmployeeCode = "EMP032",
+                            IsActive = true,
+                            IsAdmin = false,
+                            IsReviewer = false,
+                            Name = "Varun Agarwal"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000033"),
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000005"),
                             CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "dave.champion@example.com",
-                            EmployeeCode = "EMP004",
+                            EmployeeCode = "EMP033",
                             IsActive = true,
+                            IsAdmin = false,
                             IsReviewer = false,
                             Name = "Dave Champion"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000034"),
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000005"),
+                            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "rajesh.iyer@example.com",
+                            EmployeeCode = "EMP034",
+                            IsActive = true,
+                            IsAdmin = false,
+                            IsReviewer = false,
+                            Name = "Rajesh Iyer"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000035"),
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000005"),
+                            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "sunita.das@example.com",
+                            EmployeeCode = "EMP035",
+                            IsActive = true,
+                            IsAdmin = false,
+                            IsReviewer = false,
+                            Name = "Sunita Das"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000036"),
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000005"),
+                            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "manish.trivedi@example.com",
+                            EmployeeCode = "EMP036",
+                            IsActive = true,
+                            IsAdmin = false,
+                            IsReviewer = false,
+                            Name = "Manish Trivedi"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000037"),
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000005"),
+                            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "olivia.grant@example.com",
+                            EmployeeCode = "EMP037",
+                            IsActive = true,
+                            IsAdmin = false,
+                            IsReviewer = false,
+                            Name = "Olivia Grant"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000038"),
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000005"),
+                            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "preeti.saxena@example.com",
+                            EmployeeCode = "EMP038",
+                            IsActive = true,
+                            IsAdmin = false,
+                            IsReviewer = false,
+                            Name = "Preeti Saxena"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000039"),
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000005"),
+                            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "gaurav.mehta@example.com",
+                            EmployeeCode = "EMP039",
+                            IsActive = true,
+                            IsAdmin = false,
+                            IsReviewer = false,
+                            Name = "Gaurav Mehta"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-bbbb-bbbb-bbbb-000000000040"),
+                            CompetencyId = new Guid("33333333-cccc-cccc-cccc-000000000005"),
+                            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "aisha.khan@example.com",
+                            EmployeeCode = "EMP040",
+                            IsActive = true,
+                            IsAdmin = false,
+                            IsReviewer = false,
+                            Name = "Aisha Khan"
                         });
                 });
 
@@ -307,6 +834,25 @@ namespace ChampionPortal.Infrastructure.Migrations
                     b.Navigation("ActivityType");
 
                     b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("ChampionPortal.Domain.Entities.Competency", b =>
+                {
+                    b.HasOne("ChampionPortal.Domain.Entities.Employee", null)
+                        .WithMany()
+                        .HasForeignKey("HeadEmployeeId")
+                        .OnDelete(DeleteBehavior.SetNull);
+                });
+
+            modelBuilder.Entity("ChampionPortal.Domain.Entities.Employee", b =>
+                {
+                    b.HasOne("ChampionPortal.Domain.Entities.Competency", "Competency")
+                        .WithMany()
+                        .HasForeignKey("CompetencyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Competency");
                 });
 
             modelBuilder.Entity("ChampionPortal.Domain.Entities.Endorsement", b =>

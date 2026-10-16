@@ -48,9 +48,9 @@ public class GetPendingActivityTypesQueryHandler
         GetPendingActivityTypesQuery request,
         CancellationToken cancellationToken)
     {
-        if (!_currentUser.IsReviewer)
+        if (!_currentUser.IsReviewer && !_currentUser.IsAdmin)
         {
-            throw new UnauthorizedAccessException("Only reviewers can view pending activity types.");
+            throw new UnauthorizedAccessException("Only reviewers or admins can view pending activity types.");
         }
 
         var types = await _activityTypeRepository.GetPendingReviewAsync();

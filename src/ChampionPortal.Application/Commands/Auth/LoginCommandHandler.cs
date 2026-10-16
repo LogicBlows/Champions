@@ -27,6 +27,6 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponseDt
         }
 
         var token = _jwtTokenService.GenerateToken(employee);
-        return new LoginResponseDto(token, employee.Id, employee.Name, employee.IsReviewer);
+        return new LoginResponseDto(token, employee.Id, employee.Name, employee.IsReviewer, employee.IsAdmin);
     }
 }

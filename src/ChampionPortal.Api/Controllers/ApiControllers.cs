@@ -1,9 +1,12 @@
 using ChampionPortal.Application.Commands.Activities;
 using ChampionPortal.Application.Commands.ActivityTypes;
 using ChampionPortal.Application.Commands.Auth;
+using ChampionPortal.Application.Commands.Admin;
+using ChampionPortal.Application.Commands.Competencies;
 using ChampionPortal.Application.DTOs;
 using ChampionPortal.Application.Queries.Activities;
 using ChampionPortal.Application.Queries.ActivityTypes;
+using ChampionPortal.Application.Queries.Admin;
 using ChampionPortal.Application.Queries.Dashboard;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -139,5 +142,123 @@ public class DashboardController : ControllerBase
     {
         var result = await _mediator.Send(new GetDashboardQuery(search, rangeStart, rangeEnd));
         return Ok(result);
+    }
+}
+
+[ApiController]
+[Route("api/admin/employees")]
+[Authorize]
+public class AdminEmployeesController : ControllerBase
+{
+    private readonly IMediator _mediator;
+
+    public AdminEmployeesController(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<IReadOnlyList<AdminEmployeeListItemDto>>> List(
+        [FromQuery] bool includeInactive = false)
+    {
+        var result = await _mediator.Send(new GetAdminEmployeesQuery(includeInactive));
+        return Ok(result);
+    }
+
+    [HttpGet("{id:guid}")]
+    public async Task<ActionResult<AdminEmployeeDetailDto>> Get(Guid id)
+    {
+        var result = await _mediator.Send(new GetAdminEmployeeByIdQuery(id));
+        return Ok(result);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<AdminEmployeeDetailDto>> Create([FromBody] CreateAdminEmployeeRequestDto request)
+    {
+        var result = await _mediator.Send(new CreateAdminEmployeeCommand(
+            request.EmployeeCode,
+            request.Name,
+            request.Email,
+            request.CompetencyId,
+            request.IsReviewer,
+            request.IsAdmin));
+        return Ok(result);
+    }
+
+    [HttpPut("{id:guid}")]
+    public async Task<ActionResult<AdminEmployeeDetailDto>> Update(
+        Guid id,
+        [FromBody] UpdateAdminEmployeeRequestDto request)
+    {
+        var result = await _mediator.Send(new UpdateAdminEmployeeCommand(
+            id,
+            request.Name,
+            request.Email,
+            request.CompetencyId,
+            request.IsReviewer,
+            request.IsAdmin,
+            request.IsActive));
+        return Ok(result);
+    }
+
+    [HttpPost("{id:guid}/deactivate")]
+    public async Task<IActionResult> Deactivate(Guid id)
+    {
+        await _mediator.Send(new DeactivateAdminEmployeeCommand(id));
+        return NoContent();
+    }
+}
+
+[ApiController]
+[Route("api/admin/competencies")]
+[Authorize]
+public class AdminCompetenciesController : ControllerBase
+{
+    private readonly IMediator _mediator;
+
+    public AdminCompetenciesController(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<IReadOnlyList<AdminCompetencyListItemDto>>> List(
+        [FromQuery] bool includeInactive = false)
+    {
+        var result = await _mediator.Send(new GetAdminCompetenciesQuery(includeInactive));
+        return Ok(result);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<AdminCompetencyListItemDto>> Create(
+        [FromBody] CreateAdminCompetencyRequestDto request)
+    {
+        var result = await _mediator.Send(new CreateAdminCompetencyCommand(
+            request.Code,
+            request.Name,
+            request.Description,
+            request.SortOrder));
+        return Ok(result);
+    }
+
+    [HttpPut("{id:guid}")]
+    public async Task<ActionResult<AdminCompetencyListItemDto>> Update(
+        Guid id,
+        [FromBody] UpdateAdminCompetencyRequestDto request)
+    {
+        var result = await _mediator.Send(new UpdateAdminCompetencyCommand(
+            id,
+            request.Name,
+            request.Description,
+            request.SortOrder,
+            request.IsActive));
+        return Ok(result);
+    }
+
+    [HttpPut("{id:guid}/head")]
+    public async Task<IActionResult> SetHead(Guid id, [FromBody] SetCompetencyHeadRequestDto request)
+    {
+        await _mediator.Send(new SetCompetencyHeadCommand(id, request.EmployeeId));
+        return NoContent();
     }
 }
