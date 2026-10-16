@@ -29,7 +29,8 @@ public class JwtTokenService : IJwtTokenService
             new Claim(JwtRegisteredClaimNames.Sub, employee.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Name, employee.Name),
             new Claim("employee_code", employee.EmployeeCode),
-            new Claim("is_reviewer", employee.IsReviewer.ToString().ToLowerInvariant())
+            new Claim("is_reviewer", employee.IsReviewer.ToString().ToLowerInvariant()),
+            new Claim("is_admin", employee.IsAdmin.ToString().ToLowerInvariant())
         };
 
         var token = new JwtSecurityToken(

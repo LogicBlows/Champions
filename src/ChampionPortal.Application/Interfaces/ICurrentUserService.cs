@@ -4,4 +4,5 @@ public interface ICurrentUserService
 {
     Guid? EmployeeId { get; }
     bool IsReviewer { get; }
+    bool IsAdmin { get; }
 }

@@ -6,4 +6,5 @@ public record LoginResponseDto(
     string Token,
     Guid EmployeeId,
     string Name,
-    bool IsReviewer);
+    bool IsReviewer,
+    bool IsAdmin);

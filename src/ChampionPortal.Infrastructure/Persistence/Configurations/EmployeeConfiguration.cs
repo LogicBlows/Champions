@@ -10,5 +10,13 @@ public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
     {
         builder.HasIndex(e => e.EmployeeCode)
             .IsUnique();
+
+
+        builder.HasOne(e => e.Competency)
+            .WithMany()
+            .HasForeignKey(e => e.CompetencyId)
+            .HasPrincipalKey(c => c.ID)
+            .OnDelete(DeleteBehavior.Restrict);
+
     }
 }

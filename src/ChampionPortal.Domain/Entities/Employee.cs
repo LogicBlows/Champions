@@ -6,8 +6,10 @@ public class Employee
     public string EmployeeCode { get; set; } = default!;
     public string Name { get; set; } = default!;
     public string Email { get; set; } = default!;
-    public string Competency { get; set; } = default!;
+    public Guid CompetencyId { get; set; }
+    public Competency Competency { get; set; } = default!;
     public bool IsReviewer { get; set; }
+    public bool IsAdmin { get; set; }
     public bool IsActive { get; set; } = true;
     public DateTime CreatedOn { get; set; }
 

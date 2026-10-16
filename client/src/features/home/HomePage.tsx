@@ -17,7 +17,8 @@ function formatDate(iso: string) {
 }
 
 export default function HomePage() {
-  const { token, name, employeeId, isReviewer } = useAuth();
+  const { token, name, employeeId, isReviewer, isAdmin } = useAuth();
+  const canReview = isAdmin || isReviewer;
 
   const myQuery = useQuery({
     queryKey: ['my-activities'],
@@ -33,7 +34,7 @@ export default function HomePage() {
     queryKey: ['pending-activity-types'],
     queryFn: () =>
       apiRequest<PendingActivityType[]>('/activity-types/pending', { token }),
-    enabled: isReviewer,
+    enabled: canReview,
   });
 
   const loading = myQuery.isLoading || dashboardQuery.isLoading;
@@ -118,7 +119,7 @@ export default function HomePage() {
             <span className="home-action-title">Team dashboard</span>
             <span className="muted">Search the leaderboard and team totals</span>
           </Link>
-          {isReviewer && (
+          {canReview && (
             <Link to="/review" className="home-action-card home-action-card--review">
               <span className="home-action-title">
                 Review queue

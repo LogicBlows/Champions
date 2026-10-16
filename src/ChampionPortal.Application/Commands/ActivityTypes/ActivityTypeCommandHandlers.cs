@@ -69,7 +69,7 @@ public class ReviewActivityTypeCommandHandler : IRequestHandler<ReviewActivityTy
 
     public async Task Handle(ReviewActivityTypeCommand request, CancellationToken cancellationToken)
     {
-        if (!_currentUser.IsReviewer)
+        if (!_currentUser.IsReviewer && !_currentUser.IsAdmin)
         {
             throw new UnauthorizedAccessException("Only reviewers can review activity types.");
         }

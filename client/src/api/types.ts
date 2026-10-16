@@ -3,6 +3,7 @@ export interface LoginResponse {
   employeeId: string;
   name: string;
   isReviewer: boolean;
+  isAdmin: boolean;
 }
 
 export interface ActivityType {
@@ -65,4 +66,39 @@ export interface DashboardLeaderboardEntry {
 export interface DashboardResponse {
   summary: DashboardSummary;
   leaderboard: DashboardLeaderboardEntry[];
+}
+
+export interface AdminEmployeeListItem {
+  id: string;
+  employeeCode: string;
+  name: string;
+  email: string;
+  competencyId: string;
+  competencyName: string;
+  isAdmin: boolean;
+  isReviewer: boolean;
+  isActive: boolean;
+}
+
+export interface AdminEmployeeDetail {
+  id: string;
+  employeeCode: string;
+  name: string;
+  email: string;
+  competencyId: string;
+  competencyName: string;
+  isAdmin: boolean;
+  isReviewer: boolean;
+  isActive: boolean;
+}
+
+export interface AdminCompetencyListItem {
+  id: string;
+  code: string;
+  name: string;
+  description: string;
+  sortOrder: number;
+  isActive: boolean;
+  headEmployeeId: string | null;
+  headEmployeeName: string | null;
 }
